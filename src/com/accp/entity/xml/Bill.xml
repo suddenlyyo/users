@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accp.dao.BillDao">
+	<!-- 查询全部订单 -->
+	
+	<select id="queryBills" resultType="com.accp.entity.Bill">
+	select bill.*,pro.proName `provider.proName` from smbms_bill bill ,smbms_provider pro
+
+	<where>
+		bill.providerId=pro.id
+		<if test="productName != null and productName != ''">
+			and productName like '%${productName}%'
+		</if>
+		<if test="providerId > 0">
+			and providerId = #{providerId}
+		</if>
+		<if test="isPayment > 0">
+			and isPayment = #{isPayment}
+		</if>
+		<if test="id > 0">
+			and bill.id = #{id}
+		</if>
+	</where>
+</select>
+	<select id="queryBill" resultType="com.accp.entity.Bill">
+		select bill.*,pro.proName `provider.proName` from smbms_bill bill ,smbms_provider pro
+
+		<where>
+			bill.providerId=pro.id
+			<if test="id > 0">
+				and bill.id = #{id}
+			</if>
+		</where>
+	</select>
+	<!-- 删除  -->
+	<delete id="deleteBill">
+		delete from smbms_bill 
+		<where>
+			<if test="id > 0">
+				and id = #{id}
+			</if>
+		</where>
+	</delete>
+	<!-- 修改 -->
+	<update id="updateBill">
+		update smbms_bill 
+		<set>
+			<if test="billCode != null and billCode !=''">
+				 billCode = #{billCode},
+			</if>
+			<if test="productName != null and productName !=''">
+				 productName = #{productName},
+			</if>
+			<if test="productDesc != null and productDesc !=''">
+				productDesc = #{productDesc},
+			</if>
+			<if test="productUnit != null and productUnit !=''">
+				productUnit = #{productUnit},
+			</if>
+			<if test="productCount > 0">
+				productCount = #{productCount},
+			</if>
+			<if test="totalPrice > 0">
+				totalPrice = #{totalPrice},
+			</if>
+			<if test="isPayment > 0">
+				isPayment = #{isPayment},
+			</if>
+			<if test="providerId > 0">
+				providerId = #{providerId},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<insert id="saveBill" parameterType="com.accp.entity.Bill">
+	 insert into smbms_bill values(default,#{billCode},#{productName},#{productDesc}, #{productUnit},#{productCount},#{totalPrice},#{isPayment},null,now(),null,null,#{providerId})
+	</insert>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accp.dao.ProviderDao">
+	<resultMap type="com.accp.entity.Provider" id="ResultProvider">
+		<id property="id" column="id" />
+		<result property="proCode" column="proCode" />
+		<result property="proName" column="proName" />
+		<result property="proDesc" column="proDesc" />
+		<result property="proContact" column="proContact" />
+		<result property="proPhone" column="proPhone" />
+		<result property="proAddress" column="proAddress" />
+		<result property="proFax" column="proFax" />
+		<result property="createdBy" column="createdBy" />
+		<result property="creationDate" column="creationDate" />
+		<result property="modifyDate" column="modifyDate" />
+		<result property="modifyBy" column="modifyBy" />
+	</resultMap>
+	<select id="selcetProvider" resultMap="ResultProvider">
+		select r.*from smbms_provider r
+		<where>
+			<if test="proCode!=null and proCode!=''">
+				and proCode like '%${proCode}%'
+			</if>
+			<if test="proName!=null and proName!=''">
+				and proName like '%${proName}%'
+			</if>
+		</where>
+	</select>
+	<select id="one" resultType="com.accp.entity.Provider">
+		select r.*from smbms_provider r
+		<where>
+			<if test="id>0">
+				and id = #{id}
+			</if>
+		</where>
+	</select>
+	<!-- 删除 -->
+	<delete id="deleteProvider">
+		delete from smbms_provider
+		<where>
+			<if test="id > 0">
+				and id = #{id}
+			</if>
+		</where>
+	</delete>
+	<!-- 修改 -->
+	<update id="updateProvider">
+		update smbms_provider
+		<set>
+			<if test="proCode != null and proCode !=''">
+				proCode = #{proCode},
+			</if>
+			<if test="proName != null and proName !=''">
+				proName = #{proName},
+			</if>
+			<if test="proDesc != null and proDesc !=''">
+				proDesc = #{proDesc},
+			</if>
+			<if test="proContact != null and proContact !=''">
+				proContact = #{proContact},
+			</if>
+			<if test="proPhone != null and proPhone !=''">
+				proPhone = #{proPhone},
+			</if>
+			<if test="proAddress != null and proAddress !=''">
+				proAddress = #{proAddress},
+			</if>
+			<if test="proFax != null and proFax !=''">
+				proFax = #{proFax},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	<!-- 增加 -->
+	<insert id="saveProvider" parameterType="com.accp.entity.Provider">
+		insert into smbms_provider
+		values(default,#{proCode},#{proName},#{proDesc},
+		#{proContact},#{proPhone},#{proAddress},#{proFax},null,now(),null,null)
+	</insert>
+</mapper>
